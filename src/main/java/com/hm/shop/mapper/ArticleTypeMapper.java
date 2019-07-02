@@ -1,6 +1,7 @@
 package com.hm.shop.mapper;
 
 import com.hm.shop.bean.ArticleType;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -12,7 +13,12 @@ import java.util.List;
  */
 public interface ArticleTypeMapper {
 
-    @Select("select * from ec_article_type")
-    List<ArticleType> getArticleTypes();
+ @Select("select * from ec_article_type")
+ List<ArticleType> getArticleTypes();
 
+ @Select("select * from ec_article_type where length(CODE)=4")
+ List<ArticleType> findFirstArticleTypes();
+
+ @Select("select * from ec_article_type where CODE like #{typeCode} and length(CODE) = #{len}")
+ List<ArticleType> findSecondArticleTypes(@Param("typeCode") String typeCode, @Param("len") int length);
 }

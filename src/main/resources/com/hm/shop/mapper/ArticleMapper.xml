@@ -1,8 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.hm.shop.mapper.ArticleMapper">
 
+
+    <sql id="pageWhere">
+
+        <where>
+            <if test="typeCode != null &amp;&amp; typeCode!=''">
+                and TYPE_CODE like CONCAT("",#{typeCode},"%")
+            </if>
+            <if test="secondType !=null &amp;&amp; secondType!=''">
+                and TYPE_CODE=#{secondType}
+            </if>
+            <if test="title != null &amp;&amp; title!=''">
+                and TITLE like CONCAT("%",#{title},"%")
+            </if>
+        </where>
+    </sql>
+
+    <select id="findAllArticles" resultType="Article">
+        select * from ec_article
+        <include refid="pageWhere"/>
+        LIMIT #{pager.firstParam},#{pager.pageSize}
+    </select>
+    <select id="findAllArticlesCount" resultType="Integer">
+        select count(*) from ec_article
+        <include refid="pageWhere"/>
+    </select>
 </mapper>
